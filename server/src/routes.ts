@@ -46,7 +46,7 @@ routes.post("/classes", async (req, res) => {
 
     await trx.commit();
 
-    return res.json();
+    return res.status(201).json();
   } catch (error) {
     await trx.rollback();
     return res.status(400).json({ error });
