@@ -30,6 +30,10 @@
   margin-top: 3.4rem;
 }
 
+#page-teacher-form main fieldset .input-block + .textarea-block {
+  margin-top: 2.4rem;
+}
+
 #page-teacher-form main fieldset legend {
   font: 700 2.4rem Archivo;
   color: -var(--color-text-title);
