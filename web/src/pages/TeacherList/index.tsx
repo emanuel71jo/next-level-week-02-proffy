@@ -28,7 +28,7 @@ const TeacherList: React.FC = () => {
           />
           <Select
             label="Dia da semana"
-            name="week-day"
+            name="week_day"
             options={[
               { value: "0", label: "Domingo" },
               { value: "1", label: "Segunda-feira" },
