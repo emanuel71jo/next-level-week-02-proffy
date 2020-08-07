@@ -6,13 +6,18 @@ import styles from "./styles";
 
 import backIcon from "../../assets/images/icons/back.png";
 import logoImg from "../../assets/images/logo.png";
+import { useNavigation } from "@react-navigation/native";
 
 interface PageHeaderProps {
   title: string;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
-  function handleGoBack() {}
+  const navigation = useNavigation();
+
+  function handleGoBack() {
+    navigation.navigate("Landing");
+  }
 
   return (
     <View style={styles.container}>
