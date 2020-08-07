@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from "react";
 
 import PageHeader from "../../components/PageHeader";
-import TeacherItem from "../../components/TeacherItem";
+import TeacherItem, { Teacher } from "../../components/TeacherItem";
 import Input from "../../components/Input";
 import "./styles.css";
 import Select from "../../components/Select";
@@ -80,8 +80,8 @@ const TeacherList: React.FC = () => {
       </PageHeader>
 
       <main>
-        {teacherItems.map((teacher) => (
-          <TeacherItem teacher={teacher} />
+        {teacherItems.map((teacher: Teacher) => (
+          <TeacherItem key={teacher.id} teacher={teacher} />
         ))}
       </main>
     </div>
