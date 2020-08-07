@@ -6,13 +6,29 @@ import Input from "../../components/Input";
 import "./styles.css";
 import Select from "../../components/Select";
 
+import api from "../../services/api";
+
+import "./styles.css";
+
 const TeacherList: React.FC = () => {
   const [subject, setSubject] = useState("");
-  const [weekDay, setWeekDay] = useState("");
+  const [week_day, setWeekDay] = useState("");
   const [time, setTime] = useState("");
 
-  function searchTeacher(event: FormEvent) {
+  const [teacherItems, setTeacherItems] = useState([]);
+
+  async function searchTeacher(event: FormEvent) {
     event.preventDefault();
+
+    const response = await api.get("classes", {
+      params: {
+        subject,
+        week_day,
+        time,
+      },
+    });
+
+    setTeacherItems(response.data);
   }
 
   return (
@@ -39,7 +55,7 @@ const TeacherList: React.FC = () => {
           <Select
             label="Dia da semana"
             name="week_day"
-            value={weekDay}
+            value={week_day}
             onChange={(e) => setWeekDay(e.target.value)}
             options={[
               { value: "0", label: "Domingo" },
@@ -64,10 +80,9 @@ const TeacherList: React.FC = () => {
       </PageHeader>
 
       <main>
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
+        {teacherItems.map((teacher) => (
+          <TeacherItem teacher={teacher} />
+        ))}
       </main>
     </div>
   );
