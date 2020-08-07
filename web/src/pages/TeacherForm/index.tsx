@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 
 import PageHeader from "../../components/PageHeader";
 import Input from "../../components/Input";
@@ -8,6 +8,7 @@ import warningIcon from "../../assets/images/icons/warning.svg";
 import "./styles.css";
 import Textarea from "../../components/Textarea";
 import Select from "../../components/Select";
+import api from "../../services/api";
 
 const TeacherForm: React.FC = () => {
   const [name, setName] = useState("");
@@ -25,7 +26,42 @@ const TeacherForm: React.FC = () => {
     setScheduleItems([...scheduleItems, { week_day: 0, from: "", to: "" }]);
   }
 
-  function handleCreateClass() {}
+  function handleCreateClass(event: FormEvent) {
+    event.preventDefault();
+
+    api
+      .post("classes", {
+        name,
+        avatar,
+        whatsapp,
+        bio,
+        subject,
+        cost: Number(cost),
+        schedule: scheduleItems,
+      })
+      .then(() => {
+        alert("Cadastro realizado com sucesso");
+      })
+      .catch(() => {
+        alert("Erro no cadastro!!");
+      });
+  }
+
+  function setScheduleItemValue(
+    position: number,
+    field: string,
+    value: string
+  ) {
+    const updatedScheduleItems = scheduleItems.map((scheduleItem, index) => {
+      if (position === index) {
+        return { ...scheduleItem, [field]: value };
+      }
+
+      return scheduleItem;
+    });
+
+    setScheduleItems(updatedScheduleItems);
+  }
 
   return (
     <div id="page-teacher-form" className="container">
@@ -116,11 +152,15 @@ const TeacherForm: React.FC = () => {
               </button>
             </legend>
 
-            {scheduleItems.map((scheduleItem) => (
+            {scheduleItems.map((scheduleItem, index) => (
               <div key={scheduleItem.week_day} className="schedule-item">
                 <Select
                   label="Dia da semana"
                   name="week_day"
+                  onChange={(e) =>
+                    setScheduleItemValue(index, "week_day", e.target.value)
+                  }
+                  value={scheduleItem.week_day}
                   options={[
                     { value: "0", label: "Domingo" },
                     { value: "1", label: "Segunda-feira" },
@@ -132,8 +172,24 @@ const TeacherForm: React.FC = () => {
                   ]}
                 />
 
-                <Input name="from" label="Das" type="time" />
-                <Input name="to" label="Até" type="time" />
+                <Input
+                  onChange={(e) =>
+                    setScheduleItemValue(index, "from", e.target.value)
+                  }
+                  name="from"
+                  label="Das"
+                  type="time"
+                  value={scheduleItem.from}
+                />
+                <Input
+                  onChange={(e) =>
+                    setScheduleItemValue(index, "to", e.target.value)
+                  }
+                  name="to"
+                  label="Até"
+                  type="time"
+                  value={scheduleItem.to}
+                />
               </div>
             ))}
           </fieldset>
