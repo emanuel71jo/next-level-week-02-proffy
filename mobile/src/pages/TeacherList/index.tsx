@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ScrollView } from "react-native";
 
 import styles from "./styles";
 import PageHeader from "../../components/PageHeader";
@@ -10,7 +10,20 @@ const TeacherList: React.FC = () => {
     <View style={styles.container}>
       <PageHeader title="Proffys disponíveis" />
 
-      <TeacherItem />
+      <ScrollView
+        style={styles.teacherList}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingBottom: 24,
+        }}
+      >
+        <TeacherItem />
+        <TeacherItem />
+        <TeacherItem />
+        <TeacherItem />
+        <TeacherItem />
+        <TeacherItem />
+      </ScrollView>
     </View>
   );
 };
