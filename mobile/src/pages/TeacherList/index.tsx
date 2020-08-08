@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, ScrollView, Text, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, Text, TextInput, AsyncStorage } from "react-native";
 import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 
@@ -11,10 +11,24 @@ import api from "../../services/api";
 const TeacherList: React.FC = () => {
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
+  const [favorites, setFavorites] = useState<number[]>([]);
   const [teachers, setTeachers] = useState([]);
   const [subject, setSubject] = useState("");
   const [week_day, setWeekDay] = useState("");
   const [time, setTime] = useState("");
+
+  useEffect(() => {
+    AsyncStorage.getItem("favorites").then((response) => {
+      if (response) {
+        const favoritedTeachers = JSON.parse(response);
+        const favoritedTeachersIds = favoritedTeachers.map(
+          (teacher: Teacher) => teacher.id
+        );
+
+        setFavorites(favoritedTeachersIds);
+      }
+    });
+  }, []);
 
   function handleToggleFiltersVisible() {
     setIsFiltersVisible(!isFiltersVisible);
@@ -29,6 +43,7 @@ const TeacherList: React.FC = () => {
       },
     });
 
+    setIsFiltersVisible(false);
     setTeachers(response.data);
   }
 
@@ -99,7 +114,11 @@ const TeacherList: React.FC = () => {
         }}
       >
         {teachers.map((teacher: Teacher) => (
-          <TeacherItem key={teacher.id} teacher={teacher} />
+          <TeacherItem
+            key={teacher.id}
+            teacher={teacher}
+            favorited={favorites.includes(teacher.id)}
+          />
         ))}
       </ScrollView>
     </View>
